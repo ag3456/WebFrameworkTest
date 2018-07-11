@@ -1,4 +1,3 @@
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from madrigalWeb import madrigalWeb
@@ -24,6 +23,7 @@ import numpy as np
 import plotly.tools as tls
 import plotly.plotly as py
 from polls.forms import InputForm
+from polls.madData import madData
 
 user_fullname = 'Ashaki Gumbs'
 user_email = 'agumbs@bu.edu'
@@ -47,15 +47,24 @@ def index(request):
             testData = madrigalWeb.MadrigalData(madrigalUrl)
             expList = testData.getExperiments(61, fromdate.year,fromdate.month,fromdate.day,0,0,0,
                 todate.year,todate.month,todate.day,0,0,0, local=0)
+            madData(expList)
 
 
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            return HttpResponseRedirect('/polls/listexp/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = InputForm()
 
     return render(request, 'polls/inputinfo.html', {'form': form})
+
+
+def listexp(request):
+
+    return render(request, 'polls/listexp.html', {"list": madData.expList[0].name})
+
+
+

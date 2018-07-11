@@ -34,4 +34,6 @@ class Question(models.Model):
 
     def __str__ (self):
         return self.access
+    def __init__(self, expList):
+        self.expList = expList
 # Create your models here.
