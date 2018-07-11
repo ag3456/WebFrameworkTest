@@ -1,6 +1,9 @@
-<ul>
-	{% for name in expList %}
-		<li>{{name:expList}}</li>
-	{% endfor %}
-</ul>
-
+{% if latest_expList %}
+    <ul>
+    {% for name in latest_expList %}
+        <li><{{question_text.latest_expList}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}

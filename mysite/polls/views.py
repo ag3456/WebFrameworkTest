@@ -1,6 +1,8 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.template import loader
 from madrigalWeb import madrigalWeb
+from polls.models import Question
 import os
 import sys
 import time
@@ -23,7 +25,7 @@ import numpy as np
 import plotly.tools as tls
 import plotly.plotly as py
 from polls.forms import InputForm
-from polls.madData import madData
+from django.utils import timezone
 
 user_fullname = 'Ashaki Gumbs'
 user_email = 'agumbs@bu.edu'
@@ -47,7 +49,12 @@ def index(request):
             testData = madrigalWeb.MadrigalData(madrigalUrl)
             expList = testData.getExperiments(61, fromdate.year,fromdate.month,fromdate.day,0,0,0,
                 todate.year,todate.month,todate.day,0,0,0, local=0)
-            madData(expList)
+            Question.objects.all().delete()
+            for i in range(len(expList)):
+                q = Question(question_text = expList[i].name, pub_date = timezone.now() , madrigalUrl = expList[i].madrigalUrl,
+                         name = expList[i].name, realUrl = expList[i].realUrl, 
+                         url = expList[i].url)
+                q.save()
 
 
             # process the data in form.cleaned_data as required
@@ -63,8 +70,15 @@ def index(request):
 
 
 def listexp(request):
+    latest_expList = Question.objects.all()
+    template = loader.get_template('polls/listexp.html')
+    context = {'latest_expList': latest_expList}
 
-    return render(request, 'polls/listexp.html', {"list": madData.expList[0].name})
+    return HttpResponse(template.render(context, request))
+
+# def fndwnld(request, experimentid):
+#   fileList = newcgiurl.getExperimentFiles(experimentid)
+#   return render(request, 'polls/fndwnld.html')
 
 
 
