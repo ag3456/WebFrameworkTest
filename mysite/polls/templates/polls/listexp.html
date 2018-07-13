@@ -1,9 +1,10 @@
+<h1>Choose Your Experiment to Download</h1>
 {% if latest_expList %}
     <ul>
-    {% for name in latest_expList %}
-        <li><{{question_text.latest_expList}}</li>
+    {% for q in latest_expList%}
+        <li><a href = "{{ q.madid }}/">{{ q.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
-    <p>No polls are available.</p>
+    <p>No experiments are available</p>
 {% endif %}

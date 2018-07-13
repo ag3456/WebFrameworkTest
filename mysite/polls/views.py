@@ -21,15 +21,15 @@ import matplotlib.dates as mdates
 from plotly import __version__
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objs as go
-import numpy as np
+import numpy as nps
 import plotly.tools as tls
 import plotly.plotly as py
 from polls.forms import InputForm
 from django.utils import timezone
 
-user_fullname = 'Ashaki Gumbs'
-user_email = 'agumbs@bu.edu'
-user_affiliation = 'Boston University'
+# user_fullname = 'Ashaki Gumbs'
+# user_email = 'agumbs@bu.edu'
+# user_affiliation = 'Boston University'
 
 
 def index(request):
@@ -42,18 +42,24 @@ def index(request):
             location = form.cleaned_data['location']
             fromdate= form.cleaned_data['fromdate']
             todate= form.cleaned_data['todate']
-            if (location == 'SRI'):
+            if (location == '1'):
                 madrigalUrl = 'http://isr.sri.com/madrigal'
             else:
                 madrigalUrl = 'http://madrigal.haystack.mit.edu/madrigal'
+            user_fullname = 'Ashaki Gumbs'
+            user_email = 'agumbs@bu.edu'
+            user_affiliation = 'Boston University'
             testData = madrigalWeb.MadrigalData(madrigalUrl)
             expList = testData.getExperiments(61, fromdate.year,fromdate.month,fromdate.day,0,0,0,
-                todate.year,todate.month,todate.day,0,0,0, local=0)
+                todate.year,todate.month,todate.day,0,0,0, local=1)
+            # newcgiurl = madrigalWeb.MadrigalData(madrigalUrl)
+            # expList = newcgiurl.getExperiments(61, fromdate.year,fromdate.month,fromdate.day,0,0,0,
+            #     todate.year,todate.month,todate.day,0,0,0, local=1)
             Question.objects.all().delete()
             for i in range(len(expList)):
-                q = Question(question_text = expList[i].name, pub_date = timezone.now() , madrigalUrl = expList[i].madrigalUrl,
+                q = Question( pub_date = timezone.now() , madrigalUrl = expList[i].madrigalUrl,
                          name = expList[i].name, realUrl = expList[i].realUrl, 
-                         url = expList[i].url)
+                         url = expList[i].url, madid = expList[i].id)
                 q.save()
 
 
@@ -74,11 +80,13 @@ def listexp(request):
     template = loader.get_template('polls/listexp.html')
     context = {'latest_expList': latest_expList}
 
-    return HttpResponse(template.render(context, request))
+    return render(request, 'polls/listexp.html', context)
 
-# def fndwnld(request, experimentid):
-#   fileList = newcgiurl.getExperimentFiles(experimentid)
-#   return render(request, 'polls/fndwnld.html')
+def fndwnld(request, experimentid):
+    madrigalUrl = 'http://isr.sri.com/madrigal'
+    testData = madrigalWeb.MadrigalData(madrigalUrl)
+    fileList = testData.getExperimentFiles(experimentid)
+    return render(request, 'polls/fndwnld.html')
 
 
 
