@@ -10,10 +10,14 @@ class Question(models.Model):
     url= models.CharField(max_length=200, default= " ")
     madid = models.IntegerField(default = -1)
     
-
-    
     def __str__(self):
         return self.name
+
+class ExpListFileNames(models.Model):
+    expId = models.IntegerField(default = -1)
+    expName = models.CharField(max_length = 200)
+    kinddatdesc = models.CharField(max_length = 200)
+    question = models.ForeignKey(Question, on_delete = models.CASCADE) #each instance of this information is related to one experiment file
       
 
 

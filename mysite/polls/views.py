@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from madrigalWeb import madrigalWeb
 from polls.models import Question
@@ -83,9 +83,12 @@ def listexp(request):
     return render(request, 'polls/listexp.html', context)
 
 def fndwnld(request, experimentid):
+    #linktofile = get_object_or_404(Question, pk = experimentid)
     madrigalUrl = 'http://isr.sri.com/madrigal'
     testData = madrigalWeb.MadrigalData(madrigalUrl)
     fileList = testData.getExperimentFiles(experimentid)
+    linktofile = get_object_or_404(Question, madid = experimentid) #raise an error if this object does not exist
+
     return render(request, 'polls/fndwnld.html')
 
 
