@@ -1,0 +1,23 @@
+<h1> Error occurred in script getMadfile.</h1><br>
+Traceback (most recent call last):
+<br>
+  File "/Library/WebServer/CGI-Executables/madrigal/getMadfile.cgi", line 114, in __init__
+    self.createObjects()
+<br>
+  File "/Library/WebServer/CGI-Executables/madrigal/getMadfile.cgi", line 275, in createObjects
+    self.madDataObj = madrigal.data.MadrigalFile(self.fileName, self.madDBObj)
+<br>
+  File "/opt/madrigal/lib/python2.7/site-packages/madrigal/data.py", line 153, in __init__
+    tempSummary = self.__getExistingSummary()
+<br>
+  File "/opt/madrigal/lib/python2.7/site-packages/madrigal/data.py", line 1638, in __getExistingSummary
+    catData = madrigal._Madrec.cedarGetInformation(self.__filename, 0)
+<br>
+IOError: Unable to open opt/madrigal/experiments/2017/pfa/03mar17b/pfa170303.002, due to error 2
+<h3>Form elements</h3>
+<br>
+fileType = -2<br>
+user_fullname = Ashaki Gumbs<br>
+user_affiliation = Boston University<br>
+user_email = agumbs@bu.edu<br>
+fileName = opt/madrigal/experiments/2017/pfa/03mar17b/pfa170303.002<BR>

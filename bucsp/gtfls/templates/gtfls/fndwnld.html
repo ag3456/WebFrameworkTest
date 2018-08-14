@@ -1,0 +1,13 @@
+<h1>Choose Files to Download</h1>
+
+{% if ids %}
+    <ul>
+    {% for q in ids%}
+        <li><a href = "{{ q.expName }}/">{{ q.kinddatdesc }}</a><</li>
+        <br>
+        <br>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Files are not available. </p>
+{% endif %}
