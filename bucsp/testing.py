@@ -45,7 +45,7 @@ def update_figure(type):
     print(type)
     t,rng,data = returningdata2('/home/ashaki/Downloads/mlh170821i.004.hdf5', type)
     return{
-        'data':[go.Surface(  #determines the type of graph which will be plotted
+        'data':[go.Contour(  #determines the type of graph which will be plotted
             z = data,
             colorscale = 'Jet',
         )

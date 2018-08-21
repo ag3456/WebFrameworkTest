@@ -85,19 +85,18 @@ def fndwnld(request, experimentid): #get the experiment files from the experimen
 
 def downloadfiles(request, experimentid, expName):
     user_fullname = 'Ashaki Gumbs' #these variables will have to change and an input will be required eventually
-    os.system("python testing.py")
     user_email = 'agumbs@bu.edu'
     user_affiliation = 'Boston University'
     #fileinfo = get_object_or_404(ExpL, madid = experimentid).madrigalUrl
     expName= expName.replace("-", "/")
-    expName = expName.lstrip( '/')
+    expName = expName.strip( '-')
     fileName = expName.rsplit("/", 1)[1]
     testData = madrigalWeb.MadrigalData(get_object_or_404(ExpL, madid = experimentid).madrigalUrl) #get the appropiate url from the database
     j = FilesDwnld(upload = testData.downloadFile(expName, "/home/ashaki/Documents/Research_Semeter_Group/madpython/bucsp/gtfls/media/" + fileName + ".hdf5"  , "Ashaki Gumbs", "agumbs@bu.edu","Boston University", 
                         "hdf5"))
     j.save()
-    
-    
+    os.system("python testing.py")
+    webbrowser.open("google.com")
     return render(request, 'gtfls/downloadfiles.html')
 
 
