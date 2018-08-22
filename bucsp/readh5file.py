@@ -9,7 +9,9 @@ import sys
 
 i = 0
 d = {}
-options = []
+groups = []
+p = {}
+datasets = []
 def print_hdf5_file_structure(file_name) :
     """Prints the HDF5 file structure"""
     file = h5py.File(file_name, 'r') # open read-only
@@ -24,14 +26,20 @@ def print_hdf5_item_structure(g, offset='    ') :
         #x.extend(g.file)
  
     elif isinstance(g,h5py.Dataset) and not isinstance(g,h5py.Group)  :
-        print  (g.name) #, g.dtype
+        #, g.dtype
         d['label'] = g.name.rsplit("/", 1)[1]
-        d['value'] = g.name
-     
-        options.append(d.copy())
+        d['value'] =g.name.rsplit("/", 1)[1]
+        groups.append(d.copy())
 
     elif isinstance(g,h5py.Group):
-        print (g.name)
+        if ("Parameters" in g.name.rsplit("/", 1)[1]):
+            p['label'] = g.name.rsplit("/", 2)[1] + "/" + g.name.rsplit("/", 1)[1]
+            p['value'] = g.name
+            datasets.append(p.copy())
+        else:
+            pass
+        
+        
         
     else :
         print ('WARNING: UNKNOWN ITEM IN HDF5 FILE', g.name)
@@ -45,8 +53,8 @@ def print_hdf5_item_structure(g, offset='    ') :
             
 def return_options(file_name):  #this is done to return the options variable 
     print_hdf5_file_structure(file_name)
-    return options
+    return groups, datasets
  
 #if __name__ == "__main__" :
-options = return_options('/home/ashaki/Downloads/mlh170821i.004.hdf5')
+#groups, datasets = return_options('/home/ashaki/Downloads/mlh170821i.004.hdf5')
 #    sys.exit ( "End of test" )

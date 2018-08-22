@@ -13,19 +13,26 @@ from readh5file import print_hdf5_file_structure, print_hdf5_item_structure, ret
 from dash.dependencies import Input, Output
 from readh5file import print_hdf5_file_structure, print_hdf5_item_structure
 
-import plotly.graph_objs as go
 
-options = return_options('/home/ashaki/Downloads/mlh170821i.004.hdf5')
+
+import plotly.graph_objs as go
+datasets, groups = return_options('/home/ashaki/Downloads/mlh170821i.004.hdf5')
 
 app = dash.Dash()
 
 app.layout = html.Div([
     dcc.Graph(id = 'Full_Plot'),
-    html.Label('Dropdown'),
+    html.Label('Mode/Beam'),
     dcc.Dropdown(
-        id = 'Selection_Dropdown',
-        options=options,
-        value='ne'
+        id = 'Group_Dropdown',
+        options=groups,
+        value='Array with kinst=31 and mdtyp=115 and pl=0.00048 /1D Parameters',
+    ),
+    html.Label('Parameter'),
+    dcc.Dropdown(
+        id = 'Dataset_Dropdown',
+        options=datasets,
+        value = 'ne'
     ),
 
 
@@ -39,11 +46,12 @@ app.layout = html.Div([
 
 @app.callback(
      dash.dependencies.Output('Full_Plot', 'figure'),
-     [dash.dependencies.Input('Selection_Dropdown', 'value')]
+     [dash.dependencies.Input('Dataset_Dropdown', 'value'),
+     dash.dependencies.Input('Group_Dropdown', 'value')]
      )   
-def update_figure(type):
-    print(type)
-    t,rng,data = returningdata2('/home/ashaki/Downloads/mlh170821i.004.hdf5', type)
+def update_figure(group, parameter):
+    print(parameter + "/" + group)
+    data = returningdata2('/home/ashaki/Downloads/mlh170821i.004.hdf5', parameter + "/" + group)
     return{
         'data':[go.Contour(  #determines the type of graph which will be plotted
             z = data,
