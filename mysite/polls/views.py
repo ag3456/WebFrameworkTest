@@ -42,10 +42,7 @@ def index(request):
             location = form.cleaned_data['location']
             fromdate= form.cleaned_data['fromdate']
             todate= form.cleaned_data['todate']
-            if (location == '1'):
-                madrigalUrl = 'http://isr.sri.com/madrigal'
-            else:
-                madrigalUrl = 'http://madrigal.haystack.mit.edu/madrigal'
+            madrigalUrl = 'http://isr.sri.com/madrigal' if location == '1' else 'http://madrigal.haystack.mit.edu/madrigal'
             user_fullname = 'Ashaki Gumbs'
             user_email = 'agumbs@bu.edu'
             user_affiliation = 'Boston University'
