@@ -5,9 +5,10 @@ from datetime import datetime
 from typing import List, Tuple  # typing is the Python type hinting module
 
 
-#group = '/Data/Array Layout/Array with kinst=32 and mdtyp=115 and pl=0.00048 /2D Parameters'
-#dataset = 'ne'
-#field = group + '/' + dataset
+group = '/Data/Array Layout/Array with kinst=32 and mdtyp=115 and pl=0.00048 /2D Parameters'
+groupsplit = group.rsplit("/" , 1)[0]
+dataset = 'ne'
+field = group + '/' + dataset
 
 #fileapi = '/Data/Array Layout/Array with kinst=32 and mdtyp=115 and pl=0.00048 /2D Parameters/ne'
 def returningdata2(filename, fileapi,
@@ -17,15 +18,16 @@ def returningdata2(filename, fileapi,
 
 #filename = '/Users/ashakigumbs/Documents/Research_Semeter_Group/madmatlab/Zenith+single-pulse+basic+parameters.hdf5'
 
-
-     with h5py.File(filename, 'r') as f:  
-#        rng = f['/Data/Array Layout/Array with kinst=32 and mdtyp=115 and pl=0.00048 /range'][:]
-#        tut = f['/Data/Array Layout/Array with kinst=32 and mdtyp=115 and pl=0.00048 /timestamps'][:]
+     
+     with h5py.File(filename, 'r') as f: 
+        tandrng = fileapi.rsplit("/", 2)[0]
+        rng = f[tandrng + '/range'][:]
+        tut = f[tandrng + '/timestamps'][:]
         data = f[fileapi][:]
-#        newtime = [datetime.utcfromtimestamp(t) for t in tut]
+        newtime = [datetime.utcfromtimestamp(t) for t in tut]
         
 
      if rnglim is None and tlim is None:
-          return  data
+          return  newtime, rng, data
 
-#data = returningdata2('/home/ashaki/Downloads/mlh170821i.004.hdf5', field)
+newtime, rng, data = returningdata2('/home/ashaki/Downloads/mlh170821i.004.hdf5', field)

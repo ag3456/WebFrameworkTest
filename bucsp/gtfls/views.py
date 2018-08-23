@@ -96,7 +96,7 @@ def downloadfiles(request, experimentid, expName):
                         "hdf5"))
     j.save()
     os.system("python testing.py")
-    webbrowser.open("google.com")
+    #webbrowser.open("google.com")
     return render(request, 'gtfls/downloadfiles.html')
 
 

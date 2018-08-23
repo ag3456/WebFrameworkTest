@@ -12,6 +12,7 @@ from returningdata2 import returningdata2
 from readh5file import print_hdf5_file_structure, print_hdf5_item_structure, return_options
 from dash.dependencies import Input, Output
 from readh5file import print_hdf5_file_structure, print_hdf5_item_structure
+import numpy as np
 
 
 
@@ -34,6 +35,11 @@ app.layout = html.Div([
         options=datasets,
         value = 'ne'
     ),
+    dcc.RadioItems(
+            id = 'linorlog',
+            options = [{'label' : i, 'value' : i} for i in ['linear', 'log']],
+            value = 'linear',
+            ) #you can change betwwen log or linear scale
 
 
 
@@ -47,11 +53,16 @@ app.layout = html.Div([
 @app.callback(
      dash.dependencies.Output('Full_Plot', 'figure'),
      [dash.dependencies.Input('Dataset_Dropdown', 'value'),
-     dash.dependencies.Input('Group_Dropdown', 'value')]
+     dash.dependencies.Input('Group_Dropdown', 'value'),
+     dash.dependencies.Input('linorlog', 'value')]
      )   
-def update_figure(group, parameter):
+def update_figure(group, parameter, linorlogvalue):
     print(parameter + "/" + group)
-    data = returningdata2('/home/ashaki/Downloads/mlh170821i.004.hdf5', parameter + "/" + group)
+    newtime, rng ,data = returningdata2('/home/ashaki/Downloads/mlh170821i.004.hdf5', parameter + "/" + group)
+    if (linorlogvalue == 'log'):
+        data = np.log(data)
+    else:
+        data = data
     return{
         'data':[go.Contour(  #determines the type of graph which will be plotted
             z = data,
@@ -59,11 +70,19 @@ def update_figure(group, parameter):
         )
     ],
         'layout': go.Layout(
+            autosize = False,
+            width = 1000,
+            height = 1000,
             xaxis={
                 'title' : 'time',
+                'tickvals' : np.arange(len(newtime)),
+                'ticktext' :newtime,
             },
             yaxis={
-                'title' : 'range'
+                'title' : 'range (km)',
+                'tickvals' : np.arange(len(rng)),
+                'ticktext' : rng,
+                
             })
 }
 
