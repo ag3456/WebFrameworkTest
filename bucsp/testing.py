@@ -15,14 +15,14 @@ from readh5file import print_hdf5_file_structure, print_hdf5_item_structure
 import numpy as np
 
 
-
+hdf5filename = '/home/ashaki/Downloads/mlh170821i.004.hdf5'
 import plotly.graph_objs as go
-datasets, groups = return_options('/home/ashaki/Downloads/mlh170821i.004.hdf5')
+datasets, groups = return_options(hdf5filename)
 
 app = dash.Dash()
 
 app.layout = html.Div([
-    dcc.Graph(id = 'Full_Plot'),
+    
     html.Label('Mode/Beam'),
     dcc.Dropdown(
         id = 'Group_Dropdown',
@@ -39,7 +39,9 @@ app.layout = html.Div([
             id = 'linorlog',
             options = [{'label' : i, 'value' : i} for i in ['linear', 'log']],
             value = 'linear',
-            ) #you can change betwwen log or linear scale
+            ),
+    dcc.Graph(id = 'Full_Plot'),#you can change betwwen log or linear scale
+    
 
 
 
@@ -71,7 +73,7 @@ def update_figure(group, parameter, linorlogvalue):
     ],
         'layout': go.Layout(
             autosize = False,
-            width = 1000,
+            width = 1500,
             height = 1000,
             xaxis={
                 'title' : 'time',
